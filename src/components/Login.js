@@ -42,7 +42,7 @@ class Login extends Component {
       }
     };
 
-    axios.post("http://localhost:8081/api/emplogin", formData, Config)
+    axios.post("http://34.229.17.37:8081/api/emplogin", formData, Config)
       .then((response) => {
         console.log(response);
 
@@ -70,7 +70,7 @@ class Login extends Component {
         console.log(error);
       });
 
-      axios.post("http://localhost:8081/api/jslogin", formData, Config)
+      axios.post("http://34.229.17.37:8081/api/jslogin", formData, Config)
       .then((response) => {
         console.log(response);
         // console.log(response.data.result[0].UserId);

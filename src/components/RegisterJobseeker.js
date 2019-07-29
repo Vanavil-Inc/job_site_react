@@ -77,7 +77,7 @@ class RegisterJobseeker extends Component {
       }
     };
 
-    axios.post("http://localhost:8081/api/jobseeker", formData, Config)
+    axios.post("http://34.229.17.37:8081/api/jobseeker", formData, Config)
       .then((response) => {
         console.log(response);
         console.log("success" + response.data.success);

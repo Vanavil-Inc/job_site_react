@@ -47,7 +47,7 @@ class RegisterEmployer extends Component {
     };
 
     axios
-      .post("http://localhost:8081/api/registeruser", formData, Config)
+      .post("http://34.229.17.37:8081/api/registeruser", formData, Config)
       .then((response) => {
         console.log(response);
         console.log("success" + response.data.success);

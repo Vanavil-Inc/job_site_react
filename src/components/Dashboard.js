@@ -35,7 +35,7 @@ class Dashboard extends Component {
 
         if(UserType == "999"){
 
-            axios.post("http://localhost:8081/api/getonejobseeker", data, Config)
+            axios.post("http://34.229.17.37:8081/api/getonejobseeker", data, Config)
             .then((response)=> {
             console.log(response.data.result);
             
@@ -47,7 +47,7 @@ class Dashboard extends Component {
                 console.log(err);
             })
         } else {
-            axios.post("http://localhost:8081/api/getalljobseeker", data, Config)
+            axios.post("http://34.229.17.37:8081/api/getalljobseeker", data, Config)
             .then((response)=> {
             console.log(response);
             this.setState({
