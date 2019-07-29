@@ -198,13 +198,13 @@ input {
   }
 }
 .error-message{
-    width: 86%;
+    width: 100%;
     margin-left: 3.3rem;
-    height: 50px;
+    height: auto;
     margin-bottom: 2rem;
 }
 .error-message-login{
-    height: 50px;
+    height: auto;
     width: 86%;
     margin-bottom: 2rem;
 }

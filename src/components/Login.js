@@ -45,16 +45,14 @@ class Login extends Component {
     axios.post("http://34.229.17.37:8081/api/emplogin", formData, Config)
       .then((response) => {
         console.log(response);
-
-        localStorage.setItem("UserId", response.data.result[0].UserId);
-        localStorage.setItem("UserType", response.data.result[0].UserType);
-        localStorage.setItem("token", response.data.result[0].token);
-
         this.setState({
           success : response.data.success
         })
         console.log(this.state.success)
         if(this.state.success === true){
+          localStorage.setItem("UserId", response.data.result[0].UserId);
+          localStorage.setItem("UserType", response.data.result[0].UserType);
+          localStorage.setItem("token", response.data.result[0].token);
            this.setState({
               toDashboard : true
            })
@@ -73,22 +71,14 @@ class Login extends Component {
       axios.post("http://34.229.17.37:8081/api/jslogin", formData, Config)
       .then((response) => {
         console.log(response);
-        // console.log(response.data.result[0].UserId);
-        // console.log(response.data.result.Accommodation);
-
-        localStorage.setItem("UserId", response.data.result[0].UserId);
-        localStorage.setItem("UserType", response.data.result[0].UserType);
-        localStorage.setItem("token", response.data.result[0].token);
-
-        // console.log(response.data.result[0].UserId);
-        // console.log("userid login" + JSON.stringify(response.data.result[0].UserType));
-        // console.log("userid login" + JSON.stringify(response.data.result[0].token));
-
         this.setState({
           success : response.data.success
         })
         console.log(this.state.success)
         if(this.state.success === true){
+          localStorage.setItem("UserId", response.data.result[0].UserId);
+          localStorage.setItem("UserType", response.data.result[0].UserType);
+          localStorage.setItem("token", response.data.result[0].token);
            this.setState({
               toDashboard : true
            })
@@ -133,7 +123,7 @@ class Login extends Component {
                 type="text"
                 class="form-control"
                 id="UserId"
-                placeholder="Enter username/phonenumber"
+                placeholder="Enter Phone Number"
                 name="UserId"
                 onChange={this.handleInputChange}
                 required

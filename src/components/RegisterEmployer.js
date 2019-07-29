@@ -75,7 +75,7 @@ class RegisterEmployer extends Component {
   renderError() {
     if (this.state.success === false) {
     return (
-        <div className="alert alert-danger error-message">
+        <div className="alert alert-danger error-message ml-4 mr-4">
             <strong>{this.state.responseMsg}</strong>
         </div>
       );
@@ -88,8 +88,8 @@ class RegisterEmployer extends Component {
     }
     return (
       <form onSubmit={this.register}>
-       {this.renderError()}
         <div class="row ml-4 mr-4">
+        {this.renderError()}
           <div class="form-group d-flex col-xl-12 xs-d-block">
             <label class="col-xl-6">User ID / Hand Phone Number:*</label>
             <input
