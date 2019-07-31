@@ -16,7 +16,7 @@ class RegisterEmployer extends Component {
     this.state = {
       formData: {},
       UserType:"002",
-      Status : true
+      Status : "Active"
     };
   }
 
@@ -47,14 +47,14 @@ class RegisterEmployer extends Component {
     };
 
     axios
-      .post("http://34.229.17.37:8081/api/registeruser", formData, Config)
+      .post("http://localhost:8081/api/registeruser", formData, Config)
       .then((response) => {
         console.log(response);
         console.log("success" + response.data.success);
         this.setState({
           success : response.data.success
         })
-        if(this.state.success === true){
+        if(response.data.success){
             this.setState({
               toLogin: true
             })
@@ -164,7 +164,7 @@ class RegisterEmployer extends Component {
           <div class="form-group d-flex col-xl-12 xs-d-block">
             <label class="col-xl-6">E-mail Address:*</label>
             <input
-              type="text"
+              type="email"
               class="form-control col-xl-6"
               id="email"
               placeholder="ex: myname@eaxmple.com"

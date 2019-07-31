@@ -7,13 +7,21 @@ import slider_05 from '../assets/slider_05.jpg'
 import Login from './Login'
 
 class Home extends Component {
+    constructor() {
+        super();
+        this.state = {
+            success : localStorage.getItem('success'),
+         }
+    }
 
 	render() {
-
+console.log("SUCCESS VALUES :" +this.state.success)
+    const LoginView =  this.state.success ? "" : <Login/>;
+    
 	return (
         <div class="container-fluid section">
 
-            <Login/>
+            {LoginView}
 
                 <div id="carousel" class="carousel slide" data-ride="carousel">
                     <ul class="carousel-indicators">

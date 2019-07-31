@@ -30,7 +30,6 @@ class RegisterLayout extends Component {
     ) : (
       <RegisterJobseeker />
     );
-    console.log("==render=" + this.state.switchStatus);
 
     return (
       <div class="container section">

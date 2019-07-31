@@ -21,7 +21,7 @@ class Login extends Component {
     const target = event.target;
     const value = target.value;
     const name = target.name;
-
+   
     let { formData } = this.state;
     formData[name] = value;
 
@@ -42,17 +42,19 @@ class Login extends Component {
       }
     };
 
-    axios.post("http://34.229.17.37:8081/api/emplogin", formData, Config)
+
+    axios.post("http://localhost:8081/api/emplogin", formData, Config)
       .then((response) => {
         console.log(response);
         this.setState({
-          success : response.data.success
+          success: response.data.success
         })
-        console.log(this.state.success)
-        if(this.state.success === true){
-          localStorage.setItem("UserId", response.data.result[0].UserId);
+        if(response.data.success){
+          localStorage.setItem("success", response.data.success)
+          localStorage.setItem("empId", response.data.result[0].UserId);
           localStorage.setItem("UserType", response.data.result[0].UserType);
           localStorage.setItem("token", response.data.result[0].token);
+          localStorage.setItem("UserName", response.data.result[0].UserName);
            this.setState({
               toDashboard : true
            })
@@ -68,17 +70,20 @@ class Login extends Component {
         console.log(error);
       });
 
-      axios.post("http://34.229.17.37:8081/api/jslogin", formData, Config)
+      axios.post("http://localhost:8081/api/jslogin", formData, Config)
       .then((response) => {
         console.log(response);
+        // console.log(this.state.success)
         this.setState({
-          success : response.data.success
+          success: response.data.success,
+          authUser: response.data.result[0].token
         })
-        console.log(this.state.success)
-        if(this.state.success === true){
+        if(response.data.success){
+          localStorage.setItem("success", response.data.success)
           localStorage.setItem("UserId", response.data.result[0].UserId);
           localStorage.setItem("UserType", response.data.result[0].UserType);
           localStorage.setItem("token", response.data.result[0].token);
+          localStorage.setItem("UserName", response.data.result[0].UserName);
            this.setState({
               toDashboard : true
            })

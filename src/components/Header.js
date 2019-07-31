@@ -3,7 +3,24 @@ import logo from "../assets/logo.png";
 import { Link } from "react-router-dom";
 
 class Header extends Component {
+  constructor() {
+    super();
+    this.state = {
+      UserName : localStorage.getItem('UserName')
+     }    
+     console.log(" HEADER CONSTRU");
+  }
+
+  logout = (onClick) =>{
+    this.setState({UserName:""})
+    localStorage.clear() ;
+  }
+  
   render() {
+    // this.forceUpdate();
+  //  const UserName = localStorage.getItem('UserName')
+    console.log("  HEADER RENDER"+this.props.UserName);
+    console.log("User name:  "+localStorage.getItem('UserName'))
     return (
       <header className="header">
         <div class="container">
@@ -33,7 +50,7 @@ class Header extends Component {
                   </Link>
                 </li>
                 <li class="nav-item mr-5">
-                  <Link class="nav-link" to="/">
+                  <Link class="nav-link" to="/recentjobs">
                     Recent Jobs
                   </Link>
                 </li>
@@ -43,9 +60,17 @@ class Header extends Component {
                   </Link>
                 </li>
                 <li class="nav-item mr-5">
-                  <Link class="nav-link" to="/">
+                  <Link class="nav-link" to="/contact">
                     Contact
                   </Link>
+                </li>
+                  <li class={this.state.UserName == null ? "d-none" : "nav-item dropdown"}>
+                    <a class="nav-link dropdown-toggle text-capitalize" href="/" id="navbardrop" data-toggle="dropdown">
+                      {this.state.UserName}
+                    </a>
+                    <div class="dropdown-menu">
+                      <a class="dropdown-item" href="/" onClick={this.logout}>Logout</a>
+                    </div>
                 </li>
               </ul>
             </div>

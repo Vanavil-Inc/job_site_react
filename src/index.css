@@ -208,4 +208,18 @@ input {
     width: 86%;
     margin-bottom: 2rem;
 }
-
+.edit-btn{
+  width: 71px;
+}
+.status-active{
+  color: green;
+}
+.status-inactive{
+  color: red;
+}
+.oth-skills{
+  max-width: 100%;
+}
+.pl-0{
+  padding: 0px;
+}

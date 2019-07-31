@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import axios from "axios";
+import { isEmail, isEmpty, isLength, isContainWhiteSpace,isValidNumber } from '../validation/validator';
 import { Redirect } from 'react-router';
 
 class RegisterJobseeker extends Component {
@@ -14,8 +15,8 @@ class RegisterJobseeker extends Component {
       chkbx_overtime: true,
       chkbx_accom: true,
       chkbx_air_tkt: true,
-      Status: true
-
+      Status: "Active",
+      DocDirPath:""
     };
   }
 
@@ -59,6 +60,12 @@ class RegisterJobseeker extends Component {
       }
     }
 
+  onFileUpload = e =>{
+    console.log(e.target.files[0])
+    this.setState({
+      DocDirPath: e.target.files[0].name
+    })
+  }
   registerJobseeker = e => {
     e.preventDefault();
     const { formData } = this.state;
@@ -69,6 +76,7 @@ class RegisterJobseeker extends Component {
     formData["Accommodation"] = this.state.chkbx_accom;
     formData["AirTicket"] = this.state.chkbx_air_tkt;
     formData["Status"] = this.state.Status;
+    formData["DocDirPath"] = this.state.DocDirPath;
 
     let Config = {
       headers: {
@@ -77,14 +85,14 @@ class RegisterJobseeker extends Component {
       }
     };
 
-    axios.post("http://34.229.17.37:8081/api/jobseeker", formData, Config)
+    axios.post("http://localhost:8081/api/jobseeker", formData, Config)
       .then((response) => {
         console.log(response);
         console.log("success" + response.data.success);
         this.setState({
           success : response.data.success
         })
-        if(this.state.success === true){
+        if(response.data.success){
             this.setState({
               toLogin: true
             })
@@ -98,7 +106,6 @@ class RegisterJobseeker extends Component {
       .catch(error => {
         console.log(error);
       });
-
     console.log(formData);
   };
 
@@ -116,6 +123,7 @@ class RegisterJobseeker extends Component {
     if (this.state.toLogin === true) {
       return <Redirect to='/' />
     }
+    // const { errors, formSubmitted } = this.state;
     return (
       <form onSubmit={this.registerJobseeker}>
       
@@ -126,7 +134,7 @@ class RegisterJobseeker extends Component {
             <input
               type="text"
               class="form-control col-xl-6"
-              id="UserId"
+              id="UserId" 
               placeholder="Enter 8 digit hand phone number"
               onChange={this.handleInputChange}
               name="UserId"
@@ -171,7 +179,7 @@ class RegisterJobseeker extends Component {
           <div class="form-group d-flex col-xl-12 xs-d-block ">
             <label class="col-xl-6">E-mail Address:</label>
             <input
-              type="text"
+              type="email"
               class="form-control col-xl-6"
               id="email"
               placeholder="ex: myname@eaxmple.com"
@@ -224,16 +232,22 @@ class RegisterJobseeker extends Component {
               name="AdditionalSkills"
             />
           </div>
-          <div class="form-group d-flex col-xl-12 xs-d-block ">
-            <label class="col-xl-6">Other Skills:</label>
+          <div class="form-group d-flex col-xl-12 col-sm-12 xs-d-block ">
+            <label class="col-xl-6 col-sm-6">Other Skills:</label>
+            <div class="d-block col-xl-6 col-sm-6 xs-d-block pl-0">
             <input
               type="text"
-              class="form-control col-xl-6"
+              class="form-control col-xl-3 col-sm-3 oth-skills"
               id="OtherSkills"
               placeholder=""
               onChange={this.handleInputChange}
               name="OtherSkills"
             />
+              <div class="row col">
+              <label class="mr-2 mt-1">Upload file:</label>
+                <input type="file" id="myFile" name="DocDirPath" onChange={this.onFileUpload}/>
+               </div>
+            </div>
           </div>
           <div class="form-group d-flex col-xl-12 xs-d-block ">
             <label class="col-xl-6">Experience:</label>

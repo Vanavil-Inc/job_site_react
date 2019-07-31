@@ -26,7 +26,7 @@ class Footer extends Component {
             </div>
         
                 <div class="footer-copyright text-center py-3">Copyrights © 2019 All Rights Reserved by
-                    <Link to="/"> FIRST TEAM CONSULTANTS PTE. LTD</Link>
+                    <Link to="/"> FIRST TEAM CONSULTANTS PTE. LTD.</Link>
                 </div> 
         </footer>
      
