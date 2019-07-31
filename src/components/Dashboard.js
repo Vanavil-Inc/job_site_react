@@ -34,7 +34,7 @@ class Dashboard extends Component {
 
         if(this.state.UserType == "999"){
 
-            axios.post("http://localhost:8081/api/getonejobseeker", data, Config)
+            axios.post("http://34.229.17.37:8081/api/getonejobseeker", data, Config)
             .then((response)=> {
             // console.log(response.data.result);
             this.setState({
@@ -50,7 +50,7 @@ class Dashboard extends Component {
                 token : localStorage.getItem('token')
             }
     
-            axios.post("http://localhost:8081/api/getalljobseeker", data, Config)
+            axios.post("http://34.229.17.37:8081/api/getalljobseeker", data, Config)
             .then((response)=> {
             console.log(response);
             this.setState({
@@ -80,7 +80,7 @@ class Dashboard extends Component {
                 "Access-Control-Allow-Origin": "*",
             }
         };
-        axios.post("http://localhost:8081/api/deletejobseeker", data, Config)
+        axios.post("http://34.229.17.37:8081/api/deletejobseeker", data, Config)
             .then((response)=> {
             console.log(response);
             if(response.data.success){

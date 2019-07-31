@@ -50,7 +50,7 @@ class ProfileEdit extends Component {
       }
     };
 
-    axios.post("http://localhost:8081/api/updatejobseeker", formData, Config)
+    axios.post("http://34.229.17.37:8081/api/updatejobseeker", formData, Config)
       .then((response) => {
         if(response.data.success){
             this.setState({
