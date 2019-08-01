@@ -5,6 +5,8 @@ import slider_03 from '../assets/slider_03.jpg'
 import slider_04 from '../assets/slider_04.jpg'
 import slider_05 from '../assets/slider_05.jpg'
 import Login from './Login'
+import Header from './Header'
+import Footer from './Footer'
 
 class Home extends Component {
     constructor() {
@@ -20,7 +22,7 @@ console.log("SUCCESS VALUES :" +this.state.success)
     
 	return (
         <div class="container-fluid section">
-
+            <Header/>
             {LoginView}
 
                 <div id="carousel" class="carousel slide" data-ride="carousel">
@@ -75,6 +77,7 @@ console.log("SUCCESS VALUES :" +this.state.success)
                     <span class="carousel-control-next-icon"></span>
                 </a>
             </div>
+            <Footer/>
         </div>
 			
 	    );

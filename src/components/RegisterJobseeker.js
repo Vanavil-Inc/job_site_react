@@ -132,7 +132,7 @@ class RegisterJobseeker extends Component {
           <div class="form-group d-flex col-xl-12 xs-d-block">
             <label class="col-xl-6">User ID / Hand Phone Number:*</label>
             <input
-              type="text"
+              type="number"
               class="form-control col-xl-6"
               id="UserId" 
               placeholder="Enter 8 digit hand phone number"

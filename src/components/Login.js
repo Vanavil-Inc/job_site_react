@@ -7,6 +7,8 @@ import {
 } from "../validation/validator";
 import axios from "axios";
 import { Redirect } from "react-router";
+import Header from './Header'
+import Footer from './Footer'
 
 class Login extends Component {
   constructor(props) {
@@ -76,7 +78,6 @@ class Login extends Component {
         // console.log(this.state.success)
         this.setState({
           success: response.data.success,
-          authUser: response.data.result[0].token
         })
         if(response.data.success){
           localStorage.setItem("success", response.data.success)

@@ -44,9 +44,14 @@ class Header extends Component {
 
             <div class="collapse navbar-collapse" id="navbarNav">
               <ul class="nav navbar-nav ml-auto">
-                <li class="nav-item active mr-5">
+                <li class={this.state.UserName == null ?"active nav-item  mr-5": "nav-item  mr-5"}>
                   <Link class="nav-link" to="/">
                     Home <span class="sr-only">(current)</span>
+                  </Link>
+                </li>
+                <li class={this.state.UserName == null ? "d-none" :" active nav-item mr-5"}>
+                  <Link class="nav-link" to="/dashboard">
+                    Dashboard
                   </Link>
                 </li>
                 <li class="nav-item mr-5">
@@ -54,7 +59,7 @@ class Header extends Component {
                     Recent Jobs
                   </Link>
                 </li>
-                <li class="nav-item mr-5">
+                <li class={this.state.UserName == null ? "nav-item mr-5": "d-none" }>
                   <Link class="nav-link" to="/registration">
                     Registration
                   </Link>

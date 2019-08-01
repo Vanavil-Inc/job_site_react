@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import RegisterEmployer from "./RegisterEmployer";
 import RegisterJobseeker from "./RegisterJobseeker";
+import Header from './Header'
+import Footer from './Footer'
 
 class RegisterLayout extends Component {
   constructor(props) {
@@ -32,6 +34,8 @@ class RegisterLayout extends Component {
     );
 
     return (
+      <div>
+        <Header/>
       <div class="container section">
         <div class="text-center innerpage_heading mb-3">
           <h5 class="title">Registration</h5>
@@ -75,6 +79,8 @@ class RegisterLayout extends Component {
           <small class="text-muted ml-5 mb-3 d-block">* Mandatory fields</small>
           <div>{view}</div>
         </div>
+      </div>
+      <Footer/>
       </div>
     );
   }

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import axios from "axios";
 import _ from 'lodash';
 import { Link } from "react-router-dom";
+import Header from './Header'
+import Footer from './Footer'
 
 class Dashboard extends Component {
     constructor() {
@@ -126,6 +128,8 @@ class Dashboard extends Component {
     render(){
 
         return( 
+            <div>
+                <Header/>
             <div class="container section">
                 <h5 class="mb-3 mt-4 text-uppercase">{this.state.UserType === "999" ? "List of Profiles":"List of Registered Job Seekers"}</h5>
                 <table class="table table-bordered w-100">
@@ -144,6 +148,8 @@ class Dashboard extends Component {
                         {this.renderJobSeekerDeatils()}
                     </tbody>
                 </table>
+            </div>
+            <Footer/>
             </div>
         );
 

@@ -21,7 +21,7 @@ const routing = (
     <Router>
       
         <div>
-                  <Layout>
+                  {/* <Layout> */}
                     <Route path="/login"  component={Login} />
                     <Route path="/registration"  component={RegisterLayout} />
                     <Route path="/" exact component={Home} />
@@ -29,7 +29,7 @@ const routing = (
                     <Route path="/recentjobs"  component={Recent} />
                     <Route path="/contact"  component={Contact} />
                     <Route path="/editprofile"  component={Profile} />
-                 </Layout>
+                 {/* </Layout> */}
         </div>  
         
     </Router>

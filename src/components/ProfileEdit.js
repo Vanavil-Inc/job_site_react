@@ -1,6 +1,8 @@
 import React, { Component } from "react";
 import axios from "axios";
 import { Redirect } from 'react-router';
+import Header from './Header'
+import Footer from './Footer'
 
 class ProfileEdit extends Component {
   constructor(props) {
@@ -83,6 +85,8 @@ class ProfileEdit extends Component {
         return <Redirect to='/dashboard' />
       }
     return (
+    <div>
+        <Header/>
       <form onSubmit={this.updateJobseeker}>
       <div class="container section">
         <div class="text-center innerpage_heading mb-3">
@@ -141,6 +145,8 @@ class ProfileEdit extends Component {
             </div>
         </div>
       </form>
+      <Footer/>
+      </div>
     );
   }
 }
