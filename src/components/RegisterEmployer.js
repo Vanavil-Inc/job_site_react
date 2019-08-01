@@ -96,7 +96,6 @@ class RegisterEmployer extends Component {
               type="number"
               class="form-control col-xl-6"
               id="UserId"
-              min="8" max="8"
               placeholder="Enter 8 digit hand phone number"
               onChange={this.handleInputChange}
               name="UserId"
