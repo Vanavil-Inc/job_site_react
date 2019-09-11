@@ -14,10 +14,10 @@ class Footer extends Component {
 								<img class="img-responsive" src={logo} alt="" />{' '}
 							</Link>
 							<p>
-								Email: <a href="mailto:#">pp@ftc.com.sg</a>
+								Email: <a href="mailto:#">contact@ftc.com.sg</a>
 							</p>
-							<p>Phone: +65 3151 010105</p>
-							<p>Fax : +65 3151 010106</p>
+							<p>Phone: 84944676</p>
+							{/* <p>Fax : +65 3151 010106</p> */}
 							<ul class="list-inline social-links">
 								<li class="mr-2">
 									<a href="https://www.facebook.com/dtserp">

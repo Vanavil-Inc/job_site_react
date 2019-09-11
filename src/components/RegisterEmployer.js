@@ -14,6 +14,8 @@ class RegisterEmployer extends Component {
 		super(props);
 
 		this.state = {
+			timestamp: true,
+			inputKey: Date.now(),
 			formData: {},
 			UserId: '',
 			Password: '',
@@ -41,7 +43,12 @@ class RegisterEmployer extends Component {
 		};
 		this.validateForm = this.validateForm.bind(this);
 		this.register = this.register.bind(this);
+		// this.updateProfile = this.updateProfile.bind(this);
+		this.getProfile = this.getProfile.bind(this);
+		// this.deleteProfile = this.deleteProfile.bind(this);
 		this.Auth = new AuthService();
+		this.validateProfileEditForm = this.validateProfileEditForm.bind(this);
+		this.validateProfileDeleteForm = this.validateProfileDeleteForm.bind(this);
 	}
 
 	toggleValidating(validate) {
@@ -102,7 +109,83 @@ class RegisterEmployer extends Component {
 			//this.register(e);
 		}
 	}
+	validateProfileEditForm(e) {
+		e.preventDefault();
+		this.toggleValidating(true);
+		const {
+			hasUserIdError,
+			hasMOMError,
+			hasOrganisationError,
+			hasEmailError,
+			hasAddressError,
+			hasCountryError,
+			hasUserNameError
+		} = this.state;
+		if (
+			!hasUserIdError &&
+			!hasMOMError &&
+			!hasOrganisationError &&
+			!hasUserNameError &&
+			!hasEmailError &&
+			!hasAddressError &&
+			!hasCountryError
+		) {
+			e.preventDefault();
+			confirmAlert({
+				customUI: ({ onClose }) => {
+					return (
+						<div className="react-confirm-alert-body w-100">
+							<h6 class="text-center mb-4 text-dark font-weight-bold">
+								Are you sure you want to Update?
+							</h6>
+							<div class="text-center">
+								<button class="mr-4 btn btn-secondary" onClick={onClose}>
+									Cancel
+								</button>
+								<button
+									class="btn btn-primary"
+									onClick={() => {
+										this.updateProfile(e);
+										onClose();
+									}}
+								>
+									Continue
+								</button>
+							</div>
+						</div>
+					);
+				}
+			});
+			//this.registerJobseeker(e);
+		}
+	}
 
+	validateProfileDeleteForm(e) {
+		e.preventDefault();
+		confirmAlert({
+			customUI: ({ onClose }) => {
+				return (
+					<div className="react-confirm-alert-body w-100">
+						<h6 class="text-center mb-4 text-dark font-weight-bold">Are you sure you want to Delete?</h6>
+						<div class="text-center">
+							<button class="mr-4 btn btn-secondary" onClick={onClose}>
+								Cancel
+							</button>
+							<button
+								class="btn btn-primary"
+								onClick={() => {
+									this.deleteProfile(e);
+									onClose();
+								}}
+							>
+								Continue
+							</button>
+						</div>
+					</div>
+				);
+			}
+		});
+	}
 	handleInputChange = (event) => {
 		const target = event.target;
 		const value = target.value;
@@ -150,7 +233,8 @@ class RegisterEmployer extends Component {
 				if (response.data.success) {
 					this.setState({
 						responseMsg: response.data.message,
-						defaultRegister: true
+						defaultRegister: true,
+						inputKey: Date.now()
 					});
 					window.scrollTo(0, 0);
 				} else {
@@ -167,7 +251,12 @@ class RegisterEmployer extends Component {
 		console.log(formData);
 	};
 
-	getProfile = () => {
+	getProfile = (e) => {
+		e.preventDefault();
+		this.toggleValidating(true);
+		const { hasUserIdError } = this.state;
+		
+		if (!hasUserIdError) {
 		const { formData } = this.state;
 		formData['UserId'] = formData.UserId;
 		formData['UserType'] = this.state.UserType;
@@ -182,7 +271,7 @@ class RegisterEmployer extends Component {
 		};
 
 		axios
-			.post(`${this.Auth.domain}/getonejobseeker`, formData, Config)
+			.post(`${this.Auth.domain}/getoneprofile`, formData, Config)
 			.then((response) => {
 				console.log(response);
 				console.log('success' + response.data.success);
@@ -192,19 +281,102 @@ class RegisterEmployer extends Component {
 				if (response.data.success) {
 					this.setState({
 						responseMsg: response.data.message,
-						profileData: response.data.result
+						Organisation: response.data.result[0].Organisation,
+						MOM: response.data.result[0].MOM,
+						UserName: response.data.result[0].UserName,
+						email: response.data.result[0].email,
+						Address: response.data.result[0].Address,
+						Country: response.data.result[0].Country
 					});
-					window.scrollTo(0, 0);
 				} else {
 					this.setState({
 						responseMsg: response.data.message
 					});
-					window.scrollTo(0, 0);
 				}
+				window.scrollTo(0, 0);
 			})
 			.catch((error) => {
 				console.log(error);
 			});
+		}
+	};
+
+	updateProfile = (e) => {
+		e.preventDefault();
+		const { formData } = this.state;
+		formData['UserId'] = formData.UserId;
+		this.setState({
+			formData: formData
+		});
+
+		console.log(formData);
+
+		let Config = {
+			headers: {
+				'Content-Type': 'application/json;charset=UTF-8',
+				'Access-Control-Allow-Origin': '*'
+			}
+		};
+
+		axios
+			.put(`${this.Auth.domain}/updatejobseeker`, formData, Config)
+			.then((response) => {
+				console.log(response);
+				if (response.data.success) {
+					this.setState({
+						responseMsg: response.data.message
+					});
+				} else {
+					this.setState({
+						responseMsg: response.data.message
+					});
+				}
+				window.scrollTo(0, 0);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		console.log(formData);
+	};
+
+	deleteProfile = (e) => {
+		e.preventDefault();
+		const { formData } = this.state;
+		formData['UserId'] = formData.UserId;
+		this.setState({
+			formData: formData
+		});
+
+		console.log(formData);
+
+		let Config = {
+			headers: {
+				'Content-Type': 'application/json;charset=UTF-8',
+				'Access-Control-Allow-Origin': '*'
+			}
+		};
+
+		axios
+			.post(`${this.Auth.domain}/deleteprofile`, formData, Config)
+			.then((response) => {
+				console.log(response);
+				if (response.data.success) {
+					this.setState({
+						responseMsg: response.data.message,
+						inputKey: Date.now()
+					});
+				} else {
+					this.setState({
+						responseMsg: response.data.message,
+						inputKey: Date.now()
+					});
+				}
+				window.scrollTo(0, 0);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		console.log(formData);
 	};
 
 	renderError() {
@@ -252,7 +424,7 @@ class RegisterEmployer extends Component {
 			this.state.pageType === 'REGISTER';
 		return (
 			<form onSubmit={this.validateForm}>
-				<div class="row ml-4 mr-4">
+				<div class="row ml-4 mr-4" key={this.state.inputKey}>
 					{this.renderError()}
 					{this.renderSucsessMsg()}
 					<div class="form-group d-flex col-xl-12 xs-d-block">
@@ -269,9 +441,10 @@ class RegisterEmployer extends Component {
 								value={UserId}
 								name="UserId"
 								type="number"
-								maxLength={8}
+								minLength={8}
+								maxLength={12}
 								disabled={false}
-								placeholder="Enter 8 digit hand phone number"
+								placeholder="Enter 8 to 12 digit hand phone number"
 								validate={validate}
 								validationCallback={(res) => this.setState({ hasUserIdError: res, validate: false })}
 								onChange={(name, e) => this.handleInputChange(e, name)}
@@ -281,7 +454,7 @@ class RegisterEmployer extends Component {
 									check: true, // Optional.[Bool].Default: true. To determin if you need to validate.,
 									required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
 									type: 'string',
-									max: 8,
+									max: 12,
 									min: 8
 								}}
 							/>
@@ -535,11 +708,30 @@ class RegisterEmployer extends Component {
 							}}
 						/>
 					</div>
-					<div class="submit_btn mt-5 mb-5">
-						<button type="submit" class="btn btn-primary btn-style" onClick={this.validateForm}>
-							Submit
-						</button>
-					</div>
+					{this.state.adminType === '001' && this.state.pageType === 'PROFILEEDIT' ? (
+						<div class="submit_btn mt-5 mb-5">
+							<button
+								type="submit"
+								class="btn btn-primary btn-style mr-3 proBtnDel"
+								onClick={this.validateProfileDeleteForm}
+							>
+								Delete
+							</button>
+							<button
+								type="submit"
+								class="btn btn-primary btn-style"
+								onClick={this.validateProfileEditForm}
+							>
+								Update
+							</button>
+						</div>
+					) : (
+						<div class="submit_btn mt-5 mb-5">
+							<button type="submit" class="btn btn-primary btn-style" onClick={this.validateForm}>
+								Submit
+							</button>
+						</div>
+					)}
 				</div>
 				<input type="submit" style={{ display: 'none' }} />
 			</form>

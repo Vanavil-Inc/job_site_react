@@ -32,8 +32,8 @@ class Contact extends Component {
 		this.Auth = new AuthService();
 	}
 
-	componentDidMount(){
-		document.title = "Job Portal - Contact"
+	componentDidMount() {
+		document.title = 'Job Portal - Contact';
 	}
 
 	toggleValidating(validate) {
@@ -189,12 +189,13 @@ class Contact extends Component {
 										customStyleWrapper={{
 											padding: 0
 										}}
-										maxLength={8}
+										minLength={8}
+										maxLength={12}
 										value={UserId}
 										name="UserId"
 										type="number"
 										disabled={false}
-										placeholder="Enter 8 digit hand phone number"
+										placeholder="Enter 8 to 12 digit hand phone number"
 										validate={validate}
 										validationCallback={(res) =>
 											this.setState({ hasUserIdError: res, validate: false })}
@@ -207,7 +208,7 @@ class Contact extends Component {
 											check: true,
 											required: true,
 											type: 'string',
-											max: 8,
+											max: 12,
 											min: 8
 										}}
 									/>

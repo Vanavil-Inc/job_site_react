@@ -52,8 +52,13 @@ class RegisterJobseeker extends Component {
 			pageType: localStorage.getItem('PAGETYPE')
 		};
 		this.validateForm = this.validateForm.bind(this);
-        this.registerJobseeker = this.registerJobseeker.bind(this);
-        this.Auth = new AuthService();
+		this.registerJobseeker = this.registerJobseeker.bind(this);
+		// this.updateProfile = this.updateProfile.bind(this);
+		this.getProfile = this.getProfile.bind(this);
+		// this.deleteProfile = this.deleteProfile.bind(this);
+		this.Auth = new AuthService();
+		this.validateProfileEditForm = this.validateProfileEditForm.bind(this);
+		this.validateProfileDeleteForm = this.validateProfileDeleteForm.bind(this);
 	}
 
 	toggleValidating(validate) {
@@ -105,13 +110,76 @@ class RegisterJobseeker extends Component {
 		}
 	}
 
+	validateProfileEditForm(e) {
+		e.preventDefault();
+		console.log("clicked")
+		this.toggleValidating(true);
+		const { hasUserNameError } = this.state;
+		console.log(hasUserNameError)
+		if (!hasUserNameError) {
+			e.preventDefault();
+			confirmAlert({
+				customUI: ({ onClose }) => {
+					return (
+						<div className="react-confirm-alert-body w-100">
+							<h6 class="text-center mb-4 text-dark font-weight-bold">
+								Are you sure you want to Update?
+							</h6>
+							<div class="text-center">
+								<button class="mr-4 btn btn-secondary" onClick={onClose}>
+									Cancel
+								</button>
+								<button
+									class="btn btn-primary"
+									onClick={() => {
+										this.updateProfile(e);
+										onClose();
+									}}
+								>
+									Continue
+								</button>
+							</div>
+						</div>
+					);
+				}
+			});
+		}
+	}
+
+	validateProfileDeleteForm(e) {
+		e.preventDefault();
+		confirmAlert({
+			customUI: ({ onClose }) => {
+				return (
+					<div className="react-confirm-alert-body w-100">
+						<h6 class="text-center mb-4 text-dark font-weight-bold">Are you sure you want to Delete?</h6>
+						<div class="text-center">
+							<button class="mr-4 btn btn-secondary" onClick={onClose}>
+								Cancel
+							</button>
+							<button
+								class="btn btn-primary"
+								onClick={() => {
+									this.deleteProfile(e);
+									onClose();
+								}}
+							>
+								Continue
+							</button>
+						</div>
+					</div>
+				);
+			}
+		});
+	}
+
 	handleInputChange = (event) => {
 		const target = event.target;
 		const value = target.value;
 		const name = target.name;
 
 		formData.set(name, value);
-		
+
 		if (target.name == 'Password') {
 			this.setState({
 				pwd: target.value
@@ -185,6 +253,7 @@ class RegisterJobseeker extends Component {
 				this.setState({
 					success: response.data.success
 				});
+				formData.delete("file")
 				if (response.data.success) {
 					this.setState({
 						responseMsg: response.data.message,
@@ -206,8 +275,14 @@ class RegisterJobseeker extends Component {
 		console.log(formData);
 	};
 
-	getProfile = () => {
-		formData.set('UserId', formData.get("UserId"));
+	getProfile = (e) => {
+		e.preventDefault();
+		this.toggleValidating(true);
+		const { hasUserIdError } = this.state;
+		
+		if (!hasUserIdError) {
+		e.preventDefault();
+		formData.set('UserId', formData.get('UserId'));
 		formData.set('UserType', this.state.UserType);
 		let Config = {
 			headers: {
@@ -217,7 +292,7 @@ class RegisterJobseeker extends Component {
 		};
 
 		axios
-			.post(`${this.Auth.domain}/getonejobseeker`, formData, Config)
+			.post(`${this.Auth.domain}/getoneprofile`, formData, Config)
 			.then((response) => {
 				console.log(response);
 				console.log('success' + response.data.success);
@@ -227,19 +302,107 @@ class RegisterJobseeker extends Component {
 				if (response.data.success) {
 					this.setState({
 						responseMsg: response.data.message,
-						profileData: response.data.result
+						UserName: response.data.result[0].UserName,
+						email: response.data.result[0].email,
+						Address: response.data.result[0].Address,
+						Country: response.data.result[0].Country,
+						PrimarySkills: response.data.result[0].PrimarySkills,
+						AdditionalSkills: response.data.result[0].AdditionalSkills,
+						OtherSkills: response.data.result[0].OtherSkills,
+						CurrentEmp: response.data.result[0].CurrentEmp,
+						CurrentSal: response.data.result[0].CurrentSal,
+						ExpSal: response.data.result[0].ExpSal,
+						JoinDate: response.data.result[0].JoinDate,
+						ExpInMonth: response.data.result[0].ExpInMonth,
+						ExpInYear: response.data.result[0].ExpInYear
 					});
-					window.scrollTo(0, 0);
 				} else {
 					this.setState({
 						responseMsg: response.data.message
 					});
-					window.scrollTo(0, 0);
 				}
+				window.scrollTo(0, 0);
 			})
 			.catch((error) => {
 				console.log(error);
 			});
+		}
+	};
+
+	updateProfile = (e) => {
+		e.preventDefault();
+		formData.set('UserId', formData.get('UserId'));
+		formData.set('ExpInYear', this.state.ExpInYear);
+		formData.set('ExpInMonth', this.state.ExpInMonth);
+		formData.set('OverTime', this.state.chkbx_overtime);
+		formData.set('Accommodation', this.state.chkbx_accom);
+		formData.set('AirTicket', this.state.chkbx_air_tkt);
+		formData.append('file', this.state.file);
+
+		console.log(formData);
+
+		let Config = {
+			headers: {
+				'Content-Type': 'application/json;charset=UTF-8',
+				'Access-Control-Allow-Origin': '*'
+			}
+		};
+
+		axios
+			.put(`${this.Auth.domain}/updatejobseeker`, formData, Config)
+			.then((response) => {
+				console.log(response);
+				if (response.data.success) {
+					this.setState({
+						responseMsg: response.data.message
+					});
+				} else {
+					this.setState({
+						responseMsg: response.data.message
+					});
+				}
+				window.scrollTo(0, 0);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		console.log(formData);
+	};
+
+	deleteProfile = (e) => {
+		e.preventDefault();
+		formData.set('UserId', formData.get('UserId'));
+
+		console.log(formData);
+
+		let Config = {
+			headers: {
+				'Content-Type': 'application/json;charset=UTF-8',
+				'Access-Control-Allow-Origin': '*'
+			}
+		};
+
+		axios
+			.post(`${this.Auth.domain}/deleteprofile`, formData, Config)
+			.then((response) => {
+				console.log(response);
+				if (response.data.success) {
+					this.setState({
+						responseMsg: response.data.message,
+						inputKey: Date.now()
+					});
+				} else {
+					this.setState({
+						responseMsg: response.data.message,
+						inputKey: Date.now()
+					});
+				}
+				window.scrollTo(0, 0);
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+		console.log(formData);
 	};
 
 	renderError() {
@@ -258,19 +421,19 @@ class RegisterJobseeker extends Component {
 				<div className="alert alert-success error-message ml-4 mr-4">
 					<strong>
 						{this.state.responseMsg}
-						{this.state.defaultRegister === true ? 
-							this.state.adminType === "001" ? null : <Link to="/"> Please Login</Link>
-						 : null}
+						{this.state.defaultRegister === true ? this.state.adminType === '001' ? null : (
+							<Link to="/"> Please Login</Link>
+						) : null}
 					</strong>
 				</div>
 			);
 		}
 	}
 
-	onTakePhoto (dataUri) {
+	onTakePhoto(dataUri) {
 		// Do stuff with the dataUri photo...
 		console.log(dataUri);
-	  }
+	}
 
 	render() {
 		const {
@@ -295,8 +458,10 @@ class RegisterJobseeker extends Component {
 		}
 		const { deviceWidth } = this.state;
 		const width = deviceWidth < 768;
-		const searchRegister= this.state.adminType==='001' && this.state.pageType==="REGISTER" || this.state.pageType==="REGISTER"
-		const searchProfileBtn = this.state.adminType==='001' && this.state.pageType==="PROFILEEDIT"  
+		const searchRegister =
+			(this.state.adminType === '001' && this.state.pageType === 'REGISTER') ||
+			this.state.pageType === 'REGISTER';
+		const searchProfileBtn = this.state.adminType === '001' && this.state.pageType === 'PROFILEEDIT';
 		// console.log(searchRegister);
 		// console.log(searchProfileBtn);
 		return (
@@ -306,116 +471,124 @@ class RegisterJobseeker extends Component {
 					{this.renderSucsessMsg()}
 					<div class="form-group d-flex col-xl-12 xs-d-block">
 						<label class="col-xl-6">User ID / Hand Phone Number:*</label>
-						<div class={searchRegister ?"col-xl-12 pl-0" :"form-group d-flex col-xl-6 pl-0 xs-d-block"}>
-						<Textbox
-							id={'UserId'}
-							classNameInput="form-control"
-							classNameWrapper={searchRegister && !searchProfileBtn ? "col-xl-6" : "col-xl-10 col-lg-9 col-md-8"}
-							customStyleWrapper={{
-								padding: 0
-							}}
-							maxLength={8}
-							value={UserId}
-							name="UserId"
-							type="number"
-							disabled={false}
-							placeholder="Enter 8 digit hand phone number"
-							validate={validate}
-							validationCallback={(res) => this.setState({ hasUserIdError: res, validate: false })}
-							onChange={(name, e) => this.handleInputChange(e, name)}
-							onBlur={(e) => {}}
-							validationOption={{
-								name: 'UserId',
-								check: true,
-								required: true,
-								type: 'string',
-								max: 8,
-								min: 8
-							}}
-						/>
-						<div class={(this.state.adminType === '001' && this.state.pageType === 'PROFILEEDIT') ? (
-									'submit_btn col-xl-2 w-proEdit-100'
-								) : (
-									' d-none'
-								)
-							}>
-							<button type="submit" class="btn btn-primary proEdit-btn" onClick={this.getProfile}>
-								Search
-							</button>
-						</div></div>
-						
-					</div>
-					{(this.state.adminType==='001' && this.state.pageType==="REGISTER")|| this.state.pageType==="REGISTER"?
-
-					<div class="w-100">
-						<div class="form-group d-flex col-xl-12 xs-d-block ">
-							<label class="col-xl-6">Password:*</label>
+						<div class={searchRegister ? 'col-xl-12 pl-0' : 'form-group d-flex col-xl-6 pl-0 xs-d-block'}>
 							<Textbox
-								// tabIndex="1" // Optional.[String or Number].Default: none.
-								id={'Password'} // Optional.[String].Default: "". Input ID.
+								id={'UserId'}
 								classNameInput="form-control"
-								classNameWrapper="col-xl-6"
+								classNameWrapper={
+									searchRegister && !searchProfileBtn ? 'col-xl-6' : 'col-xl-10 col-lg-9 col-md-8'
+								}
 								customStyleWrapper={{
 									padding: 0
 								}}
-								value={Password}
-								name="Password"
-								type="password"
-								// value={name}
+								minLength={8}
+								maxLength={12}
+								value={UserId}
+								name="UserId"
+								type="number"
 								disabled={false}
-								placeholder="**********"
+								placeholder="Enter 8 to 12 digit hand phone number"
 								validate={validate}
-								validationCallback={(res) => this.setState({ hasPasswordError: res, validate: false })}
+								validationCallback={(res) => this.setState({ hasUserIdError: res, validate: false })}
 								onChange={(name, e) => this.handleInputChange(e, name)}
 								onBlur={(e) => {}}
 								validationOption={{
-									name: 'Password', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
-									check: true, // Optional.[Bool].Default: true. To determin if you need to validate.,
-									required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
+									name: 'UserId',
+									check: true,
+									required: true,
 									type: 'string',
-									max: 16,
-									min: 6
+									max: 12,
+									min: 8
 								}}
 							/>
-						</div>
-						<div class="form-group d-flex col-xl-12 xs-d-block ">
-						<label class="col-xl-6">Confirm Password:*</label>
-						<Textbox
-							id={'confpwd'}
-							classNameInput="form-control"
-							value={confpwd}
-							classNameWrapper="col-xl-6"
-							customStyleWrapper={{
-								padding: 0
-							}}
-							name="confpwd"
-							type="password"
-							// value={name}
-							disabled={false}
-							placeholder="**********"
-							validate={validate}
-							validationCallback={(res) => this.setState({ hasConfirmPwdError: res, validate: false })}
-							onChange={(name, e) => this.handleInputChange(e, name)}
-							onBlur={(e) => {}}
-							validationOption={{
-								name: 'Confirm Password',
-								check: true,
-								required: true,
-								type: 'string',
-								max: 16,
-								min: 6,
-								customFunc: (res) => {
-									if (res != this.state.pwd) {
-										console.log(res);
-										return 'Confirm Password does not match';
-									}
-									return true;
+							<div
+								class={
+									this.state.adminType === '001' && this.state.pageType === 'PROFILEEDIT' ? (
+										'submit_btn col-xl-2 w-proEdit-100'
+									) : (
+										' d-none'
+									)
 								}
-							}}
-						/>
+							>
+								<button type="submit" class="btn btn-primary proEdit-btn" onClick={this.getProfile}>
+									Search
+								</button>
+							</div>
+						</div>
 					</div>
-					</div>
-					:null}
+					{(this.state.adminType === '001' && this.state.pageType === 'REGISTER') ||
+					this.state.pageType === 'REGISTER' ? (
+						<div class="w-100">
+							<div class="form-group d-flex col-xl-12 xs-d-block ">
+								<label class="col-xl-6">Password:*</label>
+								<Textbox
+									// tabIndex="1" // Optional.[String or Number].Default: none.
+									id={'Password'} // Optional.[String].Default: "". Input ID.
+									classNameInput="form-control"
+									classNameWrapper="col-xl-6"
+									customStyleWrapper={{
+										padding: 0
+									}}
+									value={Password}
+									name="Password"
+									type="password"
+									// value={name}
+									disabled={false}
+									placeholder="**********"
+									validate={validate}
+									validationCallback={(res) =>
+										this.setState({ hasPasswordError: res, validate: false })}
+									onChange={(name, e) => this.handleInputChange(e, name)}
+									onBlur={(e) => {}}
+									validationOption={{
+										name: 'Password', // Optional.[String].Default: "". To display in the Error message. i.e Please enter your ${name}.
+										check: true, // Optional.[Bool].Default: true. To determin if you need to validate.,
+										required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
+										type: 'string',
+										max: 16,
+										min: 6
+									}}
+								/>
+							</div>
+							<div class="form-group d-flex col-xl-12 xs-d-block ">
+								<label class="col-xl-6">Confirm Password:*</label>
+								<Textbox
+									id={'confpwd'}
+									classNameInput="form-control"
+									value={confpwd}
+									classNameWrapper="col-xl-6"
+									customStyleWrapper={{
+										padding: 0
+									}}
+									name="confpwd"
+									type="password"
+									// value={name}
+									disabled={false}
+									placeholder="**********"
+									validate={validate}
+									validationCallback={(res) =>
+										this.setState({ hasConfirmPwdError: res, validate: false })}
+									onChange={(name, e) => this.handleInputChange(e, name)}
+									onBlur={(e) => {}}
+									validationOption={{
+										name: 'Confirm Password',
+										check: true,
+										required: true,
+										type: 'string',
+										max: 16,
+										min: 6,
+										customFunc: (res) => {
+											if (res != this.state.pwd) {
+												console.log(res);
+												return 'Confirm Password does not match';
+											}
+											return true;
+										}
+									}}
+								/>
+							</div>
+						</div>
+					) : null}
 
 					<div class={width ? 'd-none' : 'w-100'}>
 						<div class="form-group d-flex col-xl-12 xs-d-block ">
@@ -652,6 +825,7 @@ class RegisterJobseeker extends Component {
 									class="form-control mr-3 exp_year col-xl-3"
 									id="ExpInYear"
 									onChange={(e) => this.handleExp(e)}
+									value={this.state.ExpInYear}
 								>
 									<option value="0 Years" selected>
 										0 Years
@@ -664,6 +838,7 @@ class RegisterJobseeker extends Component {
 									class="form-control col-xl-3 exp_mnt"
 									id="ExpInMonth"
 									onChange={(e) => this.handleExp(e)}
+									value={this.state.ExpInMonth}
 								>
 									<option value="0 Months" selected>
 										0 Months
@@ -892,11 +1067,30 @@ class RegisterJobseeker extends Component {
           sizeFactor = {1}
         />
       </div> */}
-					<div class="submit_btn mt-5 mb-5">
-						<button type="submit" class="btn btn-primary btn-style" onClick={this.validateForm}>
-							Submit
-						</button>
-					</div>
+					{this.state.adminType === '001' && this.state.pageType === 'PROFILEEDIT' ? (
+						<div class="submit_btn mt-5 mb-5">
+							<button
+								type="submit"
+								class="btn btn-primary btn-style mr-3 proBtnDel"
+								onClick={this.validateProfileDeleteForm}
+							>
+								Delete
+							</button>
+							<button
+								type="submit"
+								class="btn btn-primary btn-style"
+								onClick={this.validateProfileEditForm}
+							>
+								Update
+							</button>
+						</div>
+					) : (
+						<div class="submit_btn mt-5 mb-5">
+							<button type="submit" class="btn btn-primary btn-style" onClick={this.validateForm}>
+								Submit
+							</button>
+						</div>
+					)}
 				</div>
 				<input type="submit" style={{ display: 'none' }} />
 			</form>

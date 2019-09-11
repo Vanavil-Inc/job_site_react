@@ -33,12 +33,12 @@ class ProfileEdit extends Component {
 			JoinDate: '',
 			ExpInMonth: '',
 			ExpInYear: '',
-			Status:'',
+			Status: '',
 			chkbx_overtime: true,
 			chkbx_accom: true,
 			chkbx_air_tkt: true,
 			DocDirPath: '',
-			deviceWidth: window.innerWidth,
+			deviceWidth: window.innerWidth
 		};
 		console.log('profile cons' + this.state.UserType);
 		this.validateForm = this.validateForm.bind(this);
@@ -48,7 +48,7 @@ class ProfileEdit extends Component {
 
 	componentDidMount() {
 		this.getUserDetails();
-		document.title = "Job Portal - Profile Edit"
+		document.title = 'Job Portal - Profile Edit';
 	}
 
 	componentWillMount() {
@@ -61,7 +61,7 @@ class ProfileEdit extends Component {
 	}
 
 	getUserDetails() {
-		let UserTypeId = this.state.UserType === '001' ?  this.state.jobseekerUserId : this.state.UserId;
+		let UserTypeId = this.state.UserType === '001' ? this.state.jobseekerUserId : this.state.UserId;
 		let data = {
 			UserId: UserTypeId
 		};
@@ -79,13 +79,15 @@ class ProfileEdit extends Component {
 			.post(`${this.Auth.domain}/getonejobseeker`, data, Config)
 			.then((response) => {
 				// console.log(response.data.result[0].ExpInMonth);
-
-				this.setState({
-					jobseekerUpdateList: response.data.result,
-					ExpInMonth: response.data.result[0].ExpInMonth,
-					ExpInYear: response.data.result[0].ExpInYear,
-					Status : response.data.result[0].Status
-				});
+				console.log(response);
+				if (response.data.success) {
+					this.setState({
+						jobseekerUpdateList: response.data.result,
+						ExpInMonth: response.data.result[0].ExpInMonth,
+						ExpInYear: response.data.result[0].ExpInYear,
+						Status: response.data.result[0].Status
+					});
+				}
 			})
 			.catch((err) => {
 				console.log(err);
@@ -172,7 +174,7 @@ class ProfileEdit extends Component {
 		formData.set('UserId', UserTypeId);
 		formData['UserType'] = this.state.UserType;
 		formData.set('Status', this.state.Status);
-		if(this.state.UserType != "002"){
+		if (this.state.UserType != '002') {
 			formData.set('ExpInYear', this.state.ExpInYear);
 			formData.set('ExpInMonth', this.state.ExpInMonth);
 		}
@@ -181,7 +183,7 @@ class ProfileEdit extends Component {
 		// localStorage.setItem("UserName",formData.UserName);
 		console.log('FORM DATA');
 		console.log(UserTypeId);
-		console.log(this.state.UserType)
+		console.log(this.state.UserType);
 
 		console.log(formData);
 
@@ -193,7 +195,7 @@ class ProfileEdit extends Component {
 		};
 
 		axios
-			.put(`${this.Auth.domain}/updatejobseeker`,formData, Config)
+			.put(`${this.Auth.domain}/updatejobseeker`, formData, Config)
 			.then((response) => {
 				console.log(response);
 				if (response.data.success) {
@@ -222,16 +224,12 @@ class ProfileEdit extends Component {
 			);
 		}
 	}
-
 	renderJobSeekerDeatils() {
 		const { deviceWidth } = this.state;
 		const width = deviceWidth < 768;
+		const { validate } = this.state;
 		return _.map(this.state.jobseekerUpdateList, (list) => {
-			// console.log(list.ExpInMonth);
-			// console.log(list.ExpInYear);
-			// localStorage.setItem("month",list.ExpInMonth);
-			// localStorage.setItem("year",list.ExpInYear);
-			const { validate } = this.state;
+			console.log('sdfssssssssssssssssssssssssssssssss');
 			return (
 				<div class="row ml-4 mr-4 pt-4">
 					{this.renderError()}
@@ -263,7 +261,9 @@ class ProfileEdit extends Component {
 											}}
 										/>
 									</div> */}
-					<div class={this.state.UserType === "999" ? "d-none":"form-group d-flex col-xl-12 xs-d-block mt-4"}>
+					<div
+						class={this.state.UserType === '999' ? 'd-none' : 'form-group d-flex col-xl-12 xs-d-block mt-4'}
+					>
 						<label class="col-xl-6">Status:</label>
 						<select
 							class="form-control col-xl-6"
@@ -541,149 +541,149 @@ class ProfileEdit extends Component {
 						/>
 					</div>
 					<div class={width ? 'd-none' : 'w-100'}>
-					<div class="form-group d-flex col-xl-12 xs-d-block ">
-						<label class="col-xl-6">Expected Salary:</label>
-						<Textbox
-							id={'ExpSal'}
-							defaultValue={list.ExpSal}
-							classNameInput="form-control"
-							classNameWrapper="col-xl-6"
-							customStyleWrapper={{
-								padding: 0
-							}}
-							name="ExpSal"
-							type="text"
-							value={list.ExpSal}
-							disabled={false}
-							placeholder=""
-							validate={validate}
-							validationCallback={(res) => this.setState({ hasExpSalError: res, validate: false })}
-							onChange={(name, e) => this.handleInputChange(e, name)}
-							onBlur={(e) => {}}
-							validationOption={{
-								name: 'ExpSal',
-								check: true,
-								required: false,
-								type: 'string'
-							}}
-						/>
-					</div>
-					<div class="form-group d-flex col-xl-12 xs-d-block ">
-						<label class="col-xl-6">Joining Date:</label>
-						<Textbox
-							id={'JoinDate'}
-							defaultValue={list.JoinDate}
-							classNameInput="form-control"
-							classNameWrapper="col-xl-6"
-							customStyleWrapper={{
-								padding: 0
-							}}
-							name="JoinDate"
-							type="text"
-							value={list.JoinDate}
-							disabled={false}
-							placeholder=""
-							validate={validate}
-							validationCallback={(res) => this.setState({ hasCountryError: res, validate: false })}
-							onChange={(name, e) => this.handleInputChange(e, name)}
-							onBlur={(e) => {}}
-							validationOption={{
-								name: 'JoinDate',
-								check: true,
-								required: false,
-								type: 'string'
-							}}
-						/>
-					</div>
+						<div class="form-group d-flex col-xl-12 xs-d-block ">
+							<label class="col-xl-6">Expected Salary:</label>
+							<Textbox
+								id={'ExpSal'}
+								defaultValue={list.ExpSal}
+								classNameInput="form-control"
+								classNameWrapper="col-xl-6"
+								customStyleWrapper={{
+									padding: 0
+								}}
+								name="ExpSal"
+								type="text"
+								value={list.ExpSal}
+								disabled={false}
+								placeholder=""
+								validate={validate}
+								validationCallback={(res) => this.setState({ hasExpSalError: res, validate: false })}
+								onChange={(name, e) => this.handleInputChange(e, name)}
+								onBlur={(e) => {}}
+								validationOption={{
+									name: 'ExpSal',
+									check: true,
+									required: false,
+									type: 'string'
+								}}
+							/>
+						</div>
+						<div class="form-group d-flex col-xl-12 xs-d-block ">
+							<label class="col-xl-6">Joining Date:</label>
+							<Textbox
+								id={'JoinDate'}
+								defaultValue={list.JoinDate}
+								classNameInput="form-control"
+								classNameWrapper="col-xl-6"
+								customStyleWrapper={{
+									padding: 0
+								}}
+								name="JoinDate"
+								type="text"
+								value={list.JoinDate}
+								disabled={false}
+								placeholder=""
+								validate={validate}
+								validationCallback={(res) => this.setState({ hasCountryError: res, validate: false })}
+								onChange={(name, e) => this.handleInputChange(e, name)}
+								onBlur={(e) => {}}
+								validationOption={{
+									name: 'JoinDate',
+									check: true,
+									required: false,
+									type: 'string'
+								}}
+							/>
+						</div>
 
-					<div class="col-12 d-flex ml-3 mt-2 w-100 xs-d-block">
-						<div class="form-check col-xl-4">
-							<Checkbox
-								tabIndex="5" //Optional.[String or Number].Default: none.
-								id={'over-time'} //Optional.[String].Default: "". Input ID.
-								name={'over-time'} //Optional.[String].Default: "". Input name
-								value="over-time" //Required.[String].Default: "".
-								checked={this.state.switchStatus ? false : true} //Required.[Bool].Default: false.
-								disabled={false} //Optional.[Bool].Default: false.
-								//validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
-								classNameInputBox="form-check-input"
-								classNameWrapper="form-check-label"
-								validationCallback={(res) =>
-									this.setState({
-										hasAgreementError: res,
-										validate: false
-									})} //Optional.[Func].Default: none. Return the validation result.
-								onChange={(name, e) => this.handleJobType(name, e)} //Required.[Func].Default: () => {}. Will return the value.
-								labelHtml={
-									<div class="form-check-label" id="over-time" style={{ marginTop: 11 }}>
-										Prefer Over-time
-									</div>
-								}
-								validationOption={{
-									name: 'agreement', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
-									check: false, //Optional.[Bool].Default: true. To determin if you need to validate.
-									required: false //Optional.[Bool].Default: true. To determin if it is a required field.
-								}}
-							/>
-						</div>
-						<div class="form-check col-xl-4">
-							<Checkbox
-								tabIndex="5" //Optional.[String or Number].Default: none.
-								id={'accomodation'} //Optional.[String].Default: "". Input ID.
-								name={'accomodation'} //Optional.[String].Default: "". Input name
-								value="accomodation" //Required.[String].Default: "".
-								checked={this.state.switchStatus ? false : true} //Required.[Bool].Default: false.
-								disabled={false} //Optional.[Bool].Default: false.
-								//validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
-								classNameInputBox="form-check-input"
-								classNameWrapper="form-check-label"
-								validationCallback={(res) =>
-									this.setState({
-										hasAgreementError: res,
-										validate: false
-									})} //Optional.[Func].Default: none. Return the validation result.
-								onChange={(name, e) => this.handleJobType(name, e)} //Required.[Func].Default: () => {}. Will return the value.
-								labelHtml={
-									<div class="form-check-label" id="accomodation" style={{ marginTop: 11 }}>
-										Require Accommodation
-									</div>
-								} //Required.[Html].Default: none.
-								validationOption={{
-									name: 'agreement', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
-									check: false, //Optional.[Bool].Default: true. To determin if you need to validate.
-									required: false //Optional.[Bool].Default: true. To determin if it is a required field.
-								}}
-							/>
-						</div>
-						<div class="form-check col-xl-4">
-							<Checkbox
-								tabIndex="5" //Optional.[String or Number].Default: none.
-								id={'air-ticket'} //Optional.[String].Default: "". Input ID.
-								name={'air-ticket'} //Optional.[String].Default: "". Input name
-								value="air-ticket" //Required.[String].Default: "".
-								checked={this.state.switchStatus ? false : true} //Required.[Bool].Default: false.
-								disabled={false} //Optional.[Bool].Default: false.
-								//validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
-								classNameInputBox="form-check-input"
-								classNameWrapper="form-check-label"
-								validationCallback={(res) =>
-									this.setState({
-										hasAgreementError: res,
-										validate: false
-									})} //Optional.[Func].Default: none. Return the validation result.
-								onChange={(name, e) => this.handleJobType(name, e)} //Required.[Func].Default: () => {}. Will return the value.
-								labelHtml={
-									<div class="form-check-label" id="air-ticket" style={{ marginTop: 11 }}>
-										Air-ticket by Agency
-									</div>
-								} //Required.[Html].Default: none.
-								validationOption={{
-									name: 'air-ticket', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
-									check: false, //Optional.[Bool].Default: true. To determin if you need to validate.
-									required: false //Optional.[Bool].Default: true. To determin if it is a required field.
-								}}
-							/>
-						</div>
+						<div class="col-12 d-flex ml-3 mt-2 w-100 xs-d-block">
+							<div class="form-check col-xl-4">
+								<Checkbox
+									tabIndex="5" //Optional.[String or Number].Default: none.
+									id={'over-time'} //Optional.[String].Default: "". Input ID.
+									name={'over-time'} //Optional.[String].Default: "". Input name
+									value="over-time" //Required.[String].Default: "".
+									checked={this.state.switchStatus ? false : true} //Required.[Bool].Default: false.
+									disabled={false} //Optional.[Bool].Default: false.
+									//validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+									classNameInputBox="form-check-input"
+									classNameWrapper="form-check-label"
+									validationCallback={(res) =>
+										this.setState({
+											hasAgreementError: res,
+											validate: false
+										})} //Optional.[Func].Default: none. Return the validation result.
+									onChange={(name, e) => this.handleJobType(name, e)} //Required.[Func].Default: () => {}. Will return the value.
+									labelHtml={
+										<div class="form-check-label" id="over-time" style={{ marginTop: 11 }}>
+											Prefer Over-time
+										</div>
+									}
+									validationOption={{
+										name: 'agreement', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
+										check: false, //Optional.[Bool].Default: true. To determin if you need to validate.
+										required: false //Optional.[Bool].Default: true. To determin if it is a required field.
+									}}
+								/>
+							</div>
+							<div class="form-check col-xl-4">
+								<Checkbox
+									tabIndex="5" //Optional.[String or Number].Default: none.
+									id={'accomodation'} //Optional.[String].Default: "". Input ID.
+									name={'accomodation'} //Optional.[String].Default: "". Input name
+									value="accomodation" //Required.[String].Default: "".
+									checked={this.state.switchStatus ? false : true} //Required.[Bool].Default: false.
+									disabled={false} //Optional.[Bool].Default: false.
+									//validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+									classNameInputBox="form-check-input"
+									classNameWrapper="form-check-label"
+									validationCallback={(res) =>
+										this.setState({
+											hasAgreementError: res,
+											validate: false
+										})} //Optional.[Func].Default: none. Return the validation result.
+									onChange={(name, e) => this.handleJobType(name, e)} //Required.[Func].Default: () => {}. Will return the value.
+									labelHtml={
+										<div class="form-check-label" id="accomodation" style={{ marginTop: 11 }}>
+											Require Accommodation
+										</div>
+									} //Required.[Html].Default: none.
+									validationOption={{
+										name: 'agreement', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
+										check: false, //Optional.[Bool].Default: true. To determin if you need to validate.
+										required: false //Optional.[Bool].Default: true. To determin if it is a required field.
+									}}
+								/>
+							</div>
+							<div class="form-check col-xl-4">
+								<Checkbox
+									tabIndex="5" //Optional.[String or Number].Default: none.
+									id={'air-ticket'} //Optional.[String].Default: "". Input ID.
+									name={'air-ticket'} //Optional.[String].Default: "". Input name
+									value="air-ticket" //Required.[String].Default: "".
+									checked={this.state.switchStatus ? false : true} //Required.[Bool].Default: false.
+									disabled={false} //Optional.[Bool].Default: false.
+									//validate={validate} //Optional.[Bool].Default: false. If you have a submit button and trying to validate all the inputs of your form at once, toggle it to true, then it will validate the field and pass the result via the "validationCallback" you provide.
+									classNameInputBox="form-check-input"
+									classNameWrapper="form-check-label"
+									validationCallback={(res) =>
+										this.setState({
+											hasAgreementError: res,
+											validate: false
+										})} //Optional.[Func].Default: none. Return the validation result.
+									onChange={(name, e) => this.handleJobType(name, e)} //Required.[Func].Default: () => {}. Will return the value.
+									labelHtml={
+										<div class="form-check-label" id="air-ticket" style={{ marginTop: 11 }}>
+											Air-ticket by Agency
+										</div>
+									} //Required.[Html].Default: none.
+									validationOption={{
+										name: 'air-ticket', //Optional.[String].Default: "". To display in the Error message. i.e Please check the ${name}.
+										check: false, //Optional.[Bool].Default: true. To determin if you need to validate.
+										required: false //Optional.[Bool].Default: true. To determin if it is a required field.
+									}}
+								/>
+							</div>
 						</div>
 					</div>
 					<div class="submit_btn mt-5 mb-5">
@@ -703,6 +703,7 @@ class ProfileEdit extends Component {
 		if (this.state.isLoggedIn == false) {
 			return <Redirect to="/" />;
 		}
+
 		return (
 			<div>
 				<Header />

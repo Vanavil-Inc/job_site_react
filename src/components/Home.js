@@ -28,7 +28,7 @@ class Home extends Component {
 	}
 
 	render() {
-		console.log('SUCCESS VALUES :' + this.state.success);
+		// console.log('SUCCESS VALUES :' + this.state.success);
 		const LoginView = this.state.success ? '' : <Login />;
 
 		return (

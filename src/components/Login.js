@@ -54,8 +54,8 @@ class Login extends Component {
 		const { formData } = this.state;
 		formData['deviceWidth'] = window.innerWidth;
 
-		console.log('fomrdata ' + JSON.stringify(formData));
-		console.log('formData ' + formData.UserId);
+		// console.log('fomrdata ' + JSON.stringify(formData));
+		// console.log('formData ' + formData.UserId);
 
 		this.Auth
 			.login(formData.UserId, formData.Password, formData.deviceWidth)
@@ -112,7 +112,8 @@ class Login extends Component {
 								value={UserId}
 								name="UserId"
 								type="number"
-								maxLength={8}
+								minLength={8}
+								maxLength={12}
 								// value={name}
 								disabled={false}
 								placeholder="Enter Phone Number"
@@ -125,7 +126,8 @@ class Login extends Component {
 									check: true, // Optional.[Bool].Default: true. To determin if you need to validate.,
 									required: true, // Optional.[Bool].Default: true. To determin if it is a required field.
 									type: 'string',
-									max: 8
+									max: 12,
+									min: 8
 								}}
 							/>
 						</div>

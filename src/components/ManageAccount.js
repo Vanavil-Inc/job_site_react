@@ -33,8 +33,8 @@ class ManageAccount extends Component {
 		this.Auth = new AuthService();
 	}
 
-	componentDidMount(){
-		document.title = "Job Portal - Manage Account"
+	componentDidMount() {
+		document.title = 'Job Portal - Manage Account';
 	}
 
 	componentWillMount() {

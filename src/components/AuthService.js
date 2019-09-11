@@ -6,8 +6,8 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 export default class AuthService {
 	// Initializing important variables
 	constructor() {
-		this.domain = 'http://localhost:8081/api'; // Local API server domain
-		// this.domain = 'http://34.229.17.37:8081/api'; // Live API server domain
+		// this.domain = 'http://localhost:8081/api'; // Local API server domain
+		this.domain = 'http://34.229.17.37:8081/api'; // Live API server domain
 		this.fetch = this.fetch.bind(this); // React binding stuff
 		this.login = this.login.bind(this);
 		this.getProfile = this.getProfile.bind(this);
@@ -23,9 +23,9 @@ export default class AuthService {
 				deviceWidth
 			})
 		}).then((res) => {
-			console.log('resp     ' + JSON.stringify(res.result));
+			// console.log('resp     ' + JSON.stringify(res.result));
 			if (res.success) {
-				console.log('res.token ' + res.result[0].token);
+				// console.log('res.token ' + res.result[0].token);
 				this.setToken(res.result[0].token); // Setting the token in localStorage
 				localStorage.setItem('success', res.success);
 				localStorage.setItem('UserId', res.result[0].UserId);

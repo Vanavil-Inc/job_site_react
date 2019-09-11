@@ -9,6 +9,7 @@ import 'react-confirm-alert/src/react-confirm-alert.css';
 import AlertComponent from './Alert';
 import { Redirect } from 'react-router';
 import AuthService from './AuthService';
+import { CSVLink, CSVDownload } from 'react-csv';
 
 class Dashboard extends Component {
 	constructor() {
@@ -50,13 +51,13 @@ class Dashboard extends Component {
 			UserId: localStorage.getItem('UserId')
 		};
 		// console.log(data);
-		console.log('USER DETAIL ' + this.state.UserType);
+		// console.log('USER DETAIL ' + this.state.UserType);
 
 		if (this.state.UserType == '999') {
 			axios
 				.get(`${this.Auth.domain}/getallrecentjobs`, Config)
 				.then((response) => {
-					// console.log(response.data.result);
+					console.log(response);
 					this.setState({
 						recentTopJobList: response.data.result
 					});
@@ -125,7 +126,7 @@ class Dashboard extends Component {
 			}
 		};
 		axios
-			.post(`${this.Auth.domain}/deletejobseeker`, data, Config)
+			.post(`${this.Auth.domain}/deleteprofile`, data, Config)
 			.then((response) => {
 				console.log(response);
 				this.setState({
@@ -143,8 +144,9 @@ class Dashboard extends Component {
 	}
 
 	renderTopRecentJobs() {
-		return _.map(this.state.recentTopJobList, (list) => {
+		return _.map(this.state.recentTopJobList, (list,index) => {
 			// console.log(list.UserId)
+			if(index<5){
 			return (
 				<div class="card mb-4">
 					<h5 class="card-header">JobTitle : {list.JobTitle}</h5>
@@ -155,6 +157,7 @@ class Dashboard extends Component {
 					</div>
 				</div>
 			);
+			}
 		});
 	}
 
@@ -173,8 +176,24 @@ class Dashboard extends Component {
 
 					{/* Employer*/}
 					{this.state.UserType === '999' ? null : (
-						<td>
-							<Link to="/editprofile">
+						<td class="actions-td">
+							<div class="recentjobs-icon-width DboardActBtns">
+							<Link to="/editprofile">	<div class="icon-text">
+																	<i
+																		class="fa fa-edit recentjobs-icons mr-2-actions"
+																		onClick={() => this.editProfile(list.UserId)}
+																	/>
+																	<span>Edit</span>
+																</div></Link>
+																<div class="icon-text">
+																	<i
+																		class="fa fa-trash-o recentjobs-icons"
+																		onClick={() => this.popupDelete(list.UserId)}
+																	/>
+																	<span>Delete</span>
+																</div>
+									</div>
+							{/* <Link to="/editprofile">
 								<button
 									type="submit"
 									class="btn btn-primary mr-2 mb-2 edit-btn"
@@ -189,7 +208,7 @@ class Dashboard extends Component {
 								onClick={() => this.popupDelete(list.UserId)}
 							>
 								Delete
-							</button>
+							</button> */}
 						</td>
 					)}
 				</tr>
@@ -197,6 +216,20 @@ class Dashboard extends Component {
 		});
 	}
 
+	exportDetails() {
+		this.state.dataResult = this.state.jobseekerList;
+
+		return _.map(this.state.jobseekerList, (list, index) => {
+			// console.log(index);
+			if (index == 0) {
+				return (
+					<div class="exportUsers"><CSVLink data={this.state.dataResult} filename="Jobseeker_List.csv">
+						Export Registered Users
+					</CSVLink></div>
+				);
+			}
+		});
+	}
 	render() {
 		if (this.state.isLoggedIn == false) {
 			return <Redirect to="/" />;
@@ -208,6 +241,7 @@ class Dashboard extends Component {
 					<h5 class="mb-3 mt-4 text-uppercase">
 						{this.state.UserType === '999' ? 'Recent Job posts' : 'List of Registered Job Seekers'}
 					</h5>
+					{this.exportDetails()}
 					{this.state.success ? (
 						<AlertComponent
 							message={this.state.responseMsg}
@@ -221,7 +255,6 @@ class Dashboard extends Component {
 							}
 						/>
 					) : null}
-
 					{this.state.UserType === '999' ? (
 						<div>{this.renderTopRecentJobs()}</div>
 					) : (

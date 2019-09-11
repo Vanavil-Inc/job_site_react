@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import Layout from './components/Layout';
 // import App from './App'
+import { Redirect } from 'react-router';
 import RegisterLayout from './components/RegisterLayout';
 import Login from './components/Login';
 import Home from './components/Home';
@@ -15,7 +16,7 @@ import Contact from './components/Contact'
 import Profile from './components/ProfileEdit'
 import ManageAccount from './components/ManageAccount'
 import * as serviceWorker from './serviceWorker';
-
+// const NotFound = () => <div> <Redirect to="/" /></div>;
 
 
 
@@ -32,6 +33,7 @@ const routing = (
                     <Route path="/contact"  component={Contact} />
                     <Route path="/editprofile"  component={Profile} />
                     <Route path="/manage-account"  component={ManageAccount} />
+                    {/* <Route  component={NotFound} /> */}
                  {/* </Layout> */}
         </div>  
         

@@ -10,7 +10,7 @@ class Header extends Component {
 			UserId: localStorage.getItem('UserId'),
 			UserType: localStorage.getItem('UserType')
 		};
-		console.log(' HEADER CONSTRU');
+		// console.log(' HEADER CONSTRU');
 	}
 
 	logout = (onClick) => {
